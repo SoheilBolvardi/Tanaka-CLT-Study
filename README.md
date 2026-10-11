@@ -1,17 +1,17 @@
 # Tanaka's Central Limit Theorem: A Study in Wasserstein Distance
 
-This repository contains a study of Tanaka's Central Limit Theorem, focusing on Wasserstein distance and its connection to convergence in the Central Limit Theorem. It also includes background material on measure-theoretic probability and probability metrics.
+This repository contains a study of Tanaka's Central Limit Theorem, focusing on Wasserstein distance and its connection to convergence in the Central Limit Theorem. It also includes a four-part mathematical exposition covering measure-theoretic probability and probability metrics.
 
 ## Overview
 
 The project explores the formulation of Tanaka's Central Limit Theorem in the \(W_2\) Wasserstein metric and the main ideas behind a coupling-based proof approach.
 
-The supporting material covers probability measures, measurable random variables, expectation, total variation distance, couplings, Wasserstein distances, and quantile functions.
+The accompanying exposition covers probability measures, measurable random variables, expectation, total variation distance, couplings, Wasserstein distances, and quantile functions.
 
 ## Repository Structure
 
 * `report/` — Final project report.
-* `notes/` — Four parts of supporting notes covering measure-theoretic probability, integration and expectation, probability metrics, and the proof strategy.
+* `exposition/` — Four-part collection of mathematical documents covering measure-theoretic probability, integration and expectation, probability metrics, and the proof strategy.
 
 ## Main Topics
 
