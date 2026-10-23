@@ -1,0 +1,208 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,amsmath,amssymb,amsthm,mathtools,microtype,geometry,enumitem,hyperref}
+\geometry{left=23mm,right=23mm,top=20mm,bottom=21mm}
+\hypersetup{hidelinks,pdftitle={Tanaka's Central Limit Theorem - Part 4 - Revised Study Notes}}
+\setlength{\parindent}{0pt}\setlength{\parskip}{4.5pt}
+\setlist[enumerate]{topsep=4pt,itemsep=4pt}
+\setlist[itemize]{topsep=4pt,itemsep=3pt}
+\newtheorem{theorem}{Theorem}\newtheorem{lemma}{Lemma}\newtheorem{remark}{Remark}
+\newcommand{\Law}{\operatorname{Law}}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\N}{\mathcal N}
+\newcommand{\W}{W_2}
+\begin{document}
+\begin{center}
+{\Large\bfseries PART 4: Tanaka's Central Limit Theorem}\par
+\vspace{2pt}
+{\normalsize Mathematical reading and proof outline --- revised edition, 2026}
+\end{center}
+\vspace{8pt}
+
+\section*{1. What is the strengthened central limit theorem?}
+Let $X_1,X_2,\ldots$ be independent and identically distributed real random variables with finite mean $m=\E X_1$ and finite, \emph{positive} variance $\sigma^2=\Var(X_1)$. Write $S_n=\sum_{i=1}^n X_i$ and
+\[
+G_n=\frac{S_n-nm}{\sigma\sqrt n}.
+\]
+The classical central limit theorem gives $G_n\Rightarrow Z$, where $Z\sim\N(0,1)$ and $\Rightarrow$ denotes convergence in distribution. Tanaka's formulation emphasizes the stronger conclusion
+\begin{theorem}[Central limit theorem in $W_2$]
+Under the assumptions above,
+\[
+\W\bigl(\Law(G_n),\N(0,1)\bigr)\longrightarrow0
+\qquad(n\longrightarrow\infty).
+\]
+\end{theorem}
+The second-order Wasserstein distance is a numerical distance between probability laws, defined for laws with finite second moments by
+\[
+\W^2(\mu,\nu)=\inf_{(U,V)\in\Gamma(\mu,\nu)}\E|U-V|^2,
+\]
+where $\Gamma(\mu,\nu)$ denotes all couplings of the two laws. Convergence in $W_2$ implies weak convergence \emph{and} convergence of second moments. Weak convergence can itself be described using other metrics, but it does not in general guarantee convergence of second moments.
+
+This part of the study outlines the \emph{coupling approach} to the theorem. For that outline we impose the \emph{additional} assumption $\E|X_1|^4<\infty$. It is not a hypothesis of the theorem as stated. The strictness/equality characterization of Tanaka's inequality is quoted from the literature rather than proved here.
+
+\section*{2. Optimal coupling on the real line}
+If $F_\mu$ is a distribution function, define its generalized inverse by
+\[
+Q_\mu(u)=\inf\{x\in\mathbb R:F_\mu(x)\ge u\},\qquad0<u<1.
+\]
+For a uniform random variable $U\sim\mathrm{Unif}(0,1)$, the pair $(Q_\mu(U),Q_\nu(U))$ gives an optimal quadratic coupling of laws on $\mathbb R$:
+\[
+\W^2(\mu,\nu)=\E\bigl|Q_\mu(U)-Q_\nu(U)\bigr|^2.
+\]
+This fact was introduced in Part 3 and is used here without reproving its optimality.
+
+
+\subsection*{Why the Gaussian reference has to match the variance}
+For a centered square-integrable random variable $X$ with variance $\sigma_X^2$, the reference normal law in the comparison is $\N(0,\sigma_X^2)$. Without matching means and variances, changes in location or scale would contribute to the transport distance and obscure the approximation to the \emph{shape} of the normal law. If $X$ and $Y$ are independent, then
+\[
+\Var(aX+bY)=a^2\Var(X)+b^2\Var(Y).
+\]
+This variance formula is the reason the Gaussian reference for $aX+bY$ must be $\N(0,a^2\sigma_X^2+b^2\sigma_Y^2)$. It also rules out expressions in which the coefficient is missing its square. For later normalized sums the comparison law is always $\N(0,1)$.
+
+\section*{3. Tanaka's comparison inequality}
+Let $X,Y$ be independent, centered random variables with positive finite variances $\sigma_X^2,\sigma_Y^2$. Let $Z_X\sim\N(0,\sigma_X^2)$ and $Z_Y\sim\N(0,\sigma_Y^2)$ be independent normal reference variables. Their couplings with $X$ and $Y$ may be chosen optimal and mutually independent. For real coefficients $a,b$, set
+\[
+Z=aZ_X+bZ_Y\sim\N\bigl(0,a^2\sigma_X^2+b^2\sigma_Y^2\bigr).
+\]
+Write $\rho(X)=\W\bigl(\Law(X),\N(0,\Var X)\bigr)$. The independently assembled couplings yield
+\begin{align*}
+\rho^2(aX+bY)
+&\le \E\bigl|a(X-Z_X)+b(Y-Z_Y)\bigr|^2\\
+&=a^2\E|X-Z_X|^2+b^2\E|Y-Z_Y|^2\\
+&=a^2\rho^2(X)+b^2\rho^2(Y).
+\end{align*}
+The middle equality follows because the two centered coupling errors are independent: both have expectation zero. The inequality is valid without assuming that $X$ or $Y$ is normal.
+
+For nonzero $a,b$, the \emph{strictness} statement used in this proof says that equality cannot occur unless both laws are Gaussian. This is the nontrivial equality characterization associated with Tanaka's inequality; we \emph{invoke it as a cited result} rather than attempt to derive it from an invalid assertion about linear quantile functions. A Gaussian quantile function is generally \emph{not} linear in its probability argument.
+
+
+\subsection*{What the inequality says and what it does not say}
+The squared-distance comparison is a weighted \emph{upper bound}. It follows from a particular coupling and the fact that Wasserstein distance optimizes over \emph{all} couplings. We are not asserting that independent optimal couplings of the summands automatically produce an optimal coupling of their sum. This distinction matters: the extra strictness result concerns exactly when the upper bound is attained.
+
+If both $X$ and $Y$ are Gaussian, their Wasserstein distances to the matching Gaussian laws are zero, so equality trivially holds. The converse statement for nonzero coefficients is the substantially harder direction used by the Tanaka approach. It is invoked from the cited literature. In particular, it does not follow from a supposed linear dependence of Gaussian quantiles on $u$; a Gaussian quantile is a nonlinear function of the quantile level.
+
+\section*{4. The dyadic subsequence: $n=2^k$}
+After centering and normalizing we may assume $\E X_1=0$ and $\E X_1^2=1$. Define
+\[
+\gamma_n=\frac{X_1+\dots+X_n}{\sqrt n},\qquad
+\eta_k=\gamma_{2^k},\qquad
+D_k=\W^2\bigl(\Law(\eta_k),\N(0,1)\bigr).
+\]
+An independent copy $\eta_k'$ has the same distribution as $\eta_k$, and
+\[
+\eta_{k+1}\stackrel{d}=\frac{\eta_k+\eta_k'}{\sqrt2}.
+\]
+Applying the inequality above with $a=b=1/\sqrt2$ gives
+\[
+D_{k+1}\le\tfrac12D_k+\tfrac12D_k=D_k.
+\]
+Thus $(D_k)$ is nonnegative and nonincreasing, so $D_k\downarrow\ell$ for some $\ell\ge0$. \emph{This establishes monotonicity for the dyadic subsequence, not for every integer $n$.}
+
+We next justify the passage to a limiting law. Independence, centering, and the finite-fourth-moment assumption give the identity
+\begin{align*}
+\E\gamma_n^4
+&=\frac1{n^2}\left(n\E X_1^4+3n(n-1)(\E X_1^2)^2\right)\\
+&=3+\frac{\E X_1^4-3}{n}.
+\end{align*}
+Hence $\sup_n\E|\gamma_n|^4<\infty$. Since $\E\eta_k^2=1$, the laws of $\eta_k$ are tight. Take a weakly convergent subsequence $\Law(\eta_{k_j})\Rightarrow\mu$. The uniform fourth-moment bound implies uniform integrability of the second moments; therefore this convergence actually holds in $W_2$ and the limit $\mu$ has mean zero and variance one.
+
+
+\subsection*{Why the fourth-moment hypothesis controls the limit}
+Tightness comes from $\E\eta_k^2=1$: Markov's inequality gives $P(|\eta_k|>R)\le R^{-2}$. A subsequential weak limit therefore exists on $\mathbb R$. However, \emph{weak convergence by itself does not allow squared moments to pass to the limit}. We need uniform integrability, and the fourth-moment bound supplies it:
+\[
+\E\bigl[\eta_k^2\mathbf1_{\{|\eta_k|>R\}}\bigr]
+\le \frac{\E\eta_k^4}{R^2}
+\le\frac{C}{R^2}\longrightarrow0
+\qquad(R\to\infty),
+\]
+uniformly in $k$. Thus the second moments converge along a weakly convergent subsequence, which on the real line is equivalent to convergence in $W_2$. This is why the fourth moment is useful for this particular coupling proof outline even though the theorem itself only needs a finite second moment.
+
+By continuity of Wasserstein distance,
+\[
+\W^2\bigl(\mu,\N(0,1)\bigr)=\lim_{j\to\infty}D_{k_j}=\ell.
+\]
+Let $U,V$ be independent with law $\mu$. The independent-copy representation and $W_2$ convergence imply
+\[
+\Law\left(\frac{\eta_{k_j}+\eta_{k_j}'}{\sqrt2}\right)
+\xrightarrow[\ j\to\infty\ ]{\,W_2\,}
+\Law\left(\frac{U+V}{\sqrt2}\right).
+\]
+On the other hand, the left side has law $\Law(\eta_{k_j+1})$, whose squared distance from $\N(0,1)$ tends to $\ell$. Consequently,
+\[
+\rho^2\left(\frac{U+V}{\sqrt2}\right)=\rho^2(U)=\ell.
+\]
+By the \emph{cited strictness characterization}, equality for this independent, normalized sum forces $\mu$ to be Gaussian. Because $\mu$ has mean zero and variance one, $\mu=\N(0,1)$, and hence $\ell=0$. Therefore
+\[
+\W\bigl(\Law(\eta_k),\N(0,1)\bigr)\longrightarrow0.
+\]
+
+
+\subsection*{Where the dyadic monotonicity comes from}
+Because $\eta_{k+1}$ has the same distribution as the normalized sum of two independent copies of $\eta_k$, the comparison inequality applies with equal weights. The conclusion is simply $D_{k+1}\le D_k$. Since the sequence is bounded below by zero, it has a limit $\ell$. Monotonicity alone does \emph{not} prove that $\ell=0$; for that, the argument identifies a subsequential limiting law and invokes the strictness/equality characterization.
+
+It is worth distinguishing three mathematical statements: (i) the nonnegative sequence $D_k$ has a limit; (ii) a subsequence of the probability laws of $\eta_k$ converges (initially weakly, then in $W_2$); and (iii) the only possible limiting law consistent with equality is Gaussian. All three are needed for the dyadic argument. Once the distance limit is zero, any subsequence selection issue disappears: $D_k\downarrow0$ along the entire dyadic sequence.
+
+\section*{5. Binary decomposition: from dyadic $n$ to every $n$}
+Every positive integer has a binary expansion $n=\sum_{k=0}^{m}\varepsilon_k2^k$, where $\varepsilon_k\in\{0,1\}$. Group the independent $X_i$ into the corresponding disjoint blocks. Each present block, divided by $\sqrt{2^k}$, has the same law as $\eta_k$; call its normalized sum $Y_k$. These block variables are independent. Thus
+\[
+\gamma_n\stackrel{d}=\sum_{k:\varepsilon_k=1}
+\sqrt{\frac{2^k}{n}}\,Y_k.
+\]
+Couple each block independently to a standard normal variable. By the comparison inequality,
+\begin{equation}\label{eq:binary}
+\W^2\bigl(\Law(\gamma_n),\N(0,1)\bigr)
+\le\sum_{k=0}^{m}\varepsilon_k\frac{2^k}{n}D_k.
+\end{equation}
+Fix $\epsilon>0$. Choose $K$ so large that $D_k<\epsilon$ for every $k\ge K$. Since $D_k\le D_0$,
+\[
+\sum_{k=0}^{m}\varepsilon_k\frac{2^k}{n}D_k
+\le\frac{D_0}{n}\sum_{k=0}^{K-1}2^k
++\epsilon\sum_{k=K}^{m}\varepsilon_k\frac{2^k}{n}
+\le\frac{D_0(2^K-1)}{n}+\epsilon.
+\]
+Letting $n\to\infty$ and then $\epsilon\to0$ proves $\W(\Law(\gamma_n),\N(0,1))\to0$ under the additional fourth-moment assumption.
+
+For illustration, when $n=13=8+4+1$, define independent block sums
+\[
+Y_3=\frac{X_1+\cdots+X_8}{\sqrt8},\quad
+Y_2=\frac{X_9+\cdots+X_{12}}{\sqrt4},\quad Y_0=X_{13}.
+\]
+Then the correct decomposition is
+\[
+\gamma_{13}=\sqrt{\frac8{13}}Y_3+
+\sqrt{\frac4{13}}Y_2+\sqrt{\frac1{13}}Y_0.
+\]
+There is no general claim here that the distance decreases at \emph{every} successive sample size.
+
+
+\subsection*{Detailed estimate in the binary step}
+To see why the low-order blocks do not prevent convergence, split the right side of \eqref{eq:binary} at a fixed level $K$. The blocks with $k<K$ are at most $K$ in number and contribute no more than
+\[
+\sum_{k<K}\varepsilon_k\frac{2^k}{n}D_k
+\le \frac{D_0}{n}\sum_{k=0}^{K-1}2^k
+=\frac{D_0(2^K-1)}{n}.
+\]
+For the high-order blocks with $k\ge K$, choose $K$ such that $D_k\le\epsilon$, giving
+\[
+\sum_{k\ge K}\varepsilon_k\frac{2^k}{n}D_k
+\le \epsilon\sum_{k\ge K}\varepsilon_k\frac{2^k}{n}\le\epsilon.
+\]
+The first term vanishes with $n$, while the second is as small as desired. This is the step that converts information at dyadic sizes $2^k$ into a statement about every integer $n$; it proves convergence without claiming monotonicity of the complete sequence.
+
+\section*{6. Why the theorem needs only the second moment}
+The argument above follows the coupling method but assumes a finite fourth moment for compactness in $W_2$. The \emph{statement} of the theorem does not require this extra assumption. One standard independent way to see the full conclusion is to combine the classical CLT with the following criterion on $\mathbb R$: weak convergence $\mu_n\Rightarrow\mu$ \emph{together with} convergence of their second moments implies $W_2(\mu_n,\mu)\to0$. Here the classical CLT gives $G_n\Rightarrow Z$, while by normalization
+\[
+\int x^2\,d\Law(G_n)(x)=\E G_n^2=1=\E Z^2
+\quad\text{for every }n.
+\]
+Thus the stronger $W_2$ conclusion follows for any finite, positive variance. This alternative explanation relies on the classical CLT and the stated Wasserstein convergence criterion; it is \emph{not} a derivation of the classical CLT from Tanaka's inequality.
+
+\section*{References and scope}
+\begin{enumerate}[leftmargin=*]
+\item H. Tanaka (1973), ``An inequality for a functional of probability distributions and its application to Kac's one-dimensional model of a Maxwellian gas,'' \emph{Zeitschrift f\"ur Wahrscheinlichkeitstheorie und Verwandte Gebiete}, 27, 47--52. The strictness/equality characterization is cited, not reproved.
+\item O. Johnson and R. Samworth (2005), ``Central limit theorem and convergence to stable laws in Mallows distance,'' \emph{Bernoulli}, 11(5), 829--845.
+\item L. Leskel\"a, \emph{Probability Theory: A Fast Course}, \S12.5, for a modern treatment of probability metrics and convergence.
+\end{enumerate}
+\textit{Study note.} This is an undergraduate reading exposition and proof outline, not an original theorem or a claim to a self-contained proof of Tanaka's equality characterization.
+\end{document}

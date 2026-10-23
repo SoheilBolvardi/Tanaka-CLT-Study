@@ -1,0 +1,206 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,amsmath,amssymb,amsthm,mathtools,microtype,geometry,enumitem,hyperref}
+\geometry{left=19mm,right=19mm,top=16mm,bottom=16mm}
+\hypersetup{hidelinks,pdftitle={Foundations of Measure-Theoretic Probability - Part 1 - Revised Study Notes}}
+\setlength{\parindent}{0pt}\setlength{\parskip}{3.3pt}
+\setlist[itemize]{topsep=4pt,itemsep=3pt}
+\newtheorem{proposition}{Proposition}
+\newcommand{\N}{\mathbb N}\newcommand{\Q}{\mathbb Q}\newcommand{\R}{\mathbb R}
+\begin{document}
+\begin{center}
+{\Large\bfseries PART 1: Measure-Theoretic Foundations}\par
+{\normalsize Mathematical reading notes --- revised edition, 2026}
+\end{center}
+\vspace{8pt}
+\textbf{Topics.} Motivations for the modern definition of probability; sigma-algebras and measurable sets (\S1.2); measures and the Dirac measure (\S1.3); monotonicity, continuity of measures and the union bound (\S1.4). The course's treatment of discrete probability mass functions (\S1.6) is not repeated here.
+
+\section*{1. Why the classical descriptions of probability are not general definitions}
+\subsection*{Classical probability}
+For a finite set $S$ whose outcomes are \emph{equally likely}, the formula
+\[
+P(A)=\frac{|A|}{|S|}
+\]
+provides a useful model. However, it does not itself describe infinite sample spaces, and equal likelihood cannot simply be assumed for arbitrary experiments. In particular, a uniform probability distribution on \emph{all} positive integers does not exist: if every singleton had the same mass $c$, countable additivity would give $1=\sum_{n\ge1}c$, which is impossible for $c\ge0$.
+
+\subsection*{Relative frequencies}
+A familiar interpretation of probability is a limiting relative frequency,
+\[
+P(A)\approx \lim_{n\to\infty}\frac{\text{number of occurrences of }A\text{ in the first }n\text{ trials}}{n},
+\]
+when such a limit exists. This is an important consequence or interpretation of a probabilistic model, but it cannot replace the axioms in general: limits of observed frequencies may fail to exist, and functions obtained as limiting \emph{densities} on subsets of $\N$ need not be countably additive.
+
+For example, the asymptotic density $d(A)=\lim_{n\to\infty}|A\cap\{1,\ldots,n\}|/n$, when it exists, gives $d(\{k\})=0$ for each singleton $\{k\}$, but $d(\N)=1$. If it were a probability measure on all subsets, countable additivity would imply $1=d(\N)=\sum_{k\ge1}d(\{k\})=0$. This is an example of the \emph{failure of countable additivity for asymptotic density}, not a genuine uniform random choice from $\N$.
+
+\subsection*{Geometric probability and a nonmeasurable set}
+For some finite intervals or regions, probability can be modeled by a ratio of lengths, areas or volumes. Such a model presupposes that the sets under discussion have a well-defined measure. In general one cannot consistently assign an extension of ordinary length to \emph{all} subsets of $\R$ while preserving translation invariance and countable additivity. The following Vitali-set construction illustrates why.
+
+Define an equivalence relation on $[0,1]$ by
+\[
+x\sim y\quad\Longleftrightarrow\quad x-y\in\Q.
+\]
+The interval is partitioned into pairwise disjoint equivalence classes $[x]=\{y\in[0,1]:y-x\in\Q\}$. Each class is countable, because its elements form a subset of a rational translate; there are uncountably many classes, since a countable union of countable sets would be countable. By the axiom of choice, select one point from each class, and let $V\subset[0,1]$ be the set of representatives (a Vitali set).
+
+Distinct points of $V$ cannot differ by a rational number. Consider \emph{rational} translates of $V$, indexed by $q\in\Q\cap[-1,1]$:
+\[
+V+q=\{v+q:v\in V\},\qquad
+A=\bigcup_{q\in\Q\cap[-1,1]}(V+q).
+\]
+These translates are pairwise disjoint: if $v_1+q_1=v_2+q_2$, then $v_1-v_2=q_2-q_1\in\Q$, so by construction $v_1=v_2$ and hence $q_1=q_2$.
+
+Every $x\in[0,1]$ differs by some rational $q\in[-1,1]$ from the representative of its class; therefore $x\in V+q$. Conversely $V\subset[0,1]$ and $q\in[-1,1]$, so each translate is contained in $[-1,2]$. Thus
+\[
+[0,1]\subseteq A\subseteq[-1,2].
+\]
+\begin{proposition}[Vitali contradiction]
+There is no countably additive, translation-invariant, nonnegative measure $m$ defined on \emph{every subset} of $\R$ that assigns ordinary length to every interval.
+\end{proposition}
+\begin{proof}
+If such a measure existed, monotonicity and the displayed inclusions would imply $1\le m(A)\le3$. On the other hand, using disjointness, translation invariance and countable additivity,
+\[
+m(A)=\sum_{q\in\Q\cap[-1,1]}m(V+q)
+=\sum_{q\in\Q\cap[-1,1]}m(V).
+\]
+There are infinitely many such rationals. If $m(V)=0$ the sum is $0$; if $m(V)>0$ (including $+\infty$) the sum is $+\infty$. Both contradict $1\le m(A)\le3$.
+\end{proof}
+The argument \emph{does not} say that points of $A$ lying outside $[0,1]$ have measure zero, nor that $A$ has the same length as $[0,1]$. It motivates restricting the domain of measurable events instead of attempting to measure every subset.
+
+
+\subsection*{Further details of the Vitali construction}
+The equivalence classes in the preceding argument are neither singletons nor a finite partition. For example, if $x\in[0,1]$, then every $x+q$ that stays inside $[0,1]$, with $q\in\Q$, belongs to the class of $x$. Since $\Q$ is countable, so is each equivalence class. The axiom of choice is used to select one representative \emph{simultaneously} from each class. It does not prescribe an effective procedure for listing those representatives.
+
+The restriction to \emph{rational} translates is crucial to disjointness. If $q_1,q_2$ were arbitrary distinct \emph{real} numbers, then $q_2-q_1$ need not be rational, and the defining property of a Vitali set would not yield a contradiction. The corrected measure argument uses both inclusions
+\[
+[0,1]\subseteq\bigcup_{q\in\Q\cap[-1,1]}(V+q)\subseteq[-1,2],
+\]
+not an equality of the middle set with $[0,1]$. This is why monotonicity gives lower and upper \emph{bounds} on its length.
+
+A final point: this construction disproves the existence of a length assignment to \emph{every} real subset satisfying the stated properties. It does not say that geometric probability is invalid on its natural domain. Lebesgue measure is well defined on the sigma-algebra of Lebesgue-measurable sets, so ordinary geometric probability remains a valuable special case.
+
+\section*{2. Probability spaces and sigma-algebras (\S1.2)}
+A \emph{sigma-algebra} $\mathcal S$ on a set $S$ is a collection of subsets satisfying
+\begin{enumerate}[leftmargin=*,label=(\roman*)]
+\item $\varnothing,S\in\mathcal S$;
+\item $A\in\mathcal S\implies S\setminus A\in\mathcal S$;
+\item $A_1,A_2,\ldots\in\mathcal S\implies \bigcup_{n\ge1}A_n\in\mathcal S$.
+\end{enumerate}
+By De Morgan's law it is also closed under countable intersections. Members of $\mathcal S$ are \emph{measurable sets}; $(S,\mathcal S)$ is a measurable space. Both the full power set $\mathcal P(S)$ and the trivial sigma-algebra $\{\varnothing,S\}$ are examples, for \emph{any} set $S$.
+
+A \emph{probability space} is a triple $(S,\mathcal S,P)$, where $P:\mathcal S\to[0,1]$ is a probability measure. We do not ask $P$ to assign probabilities to all subsets of $S$ unless we have specifically chosen the full power set as the sigma-algebra.
+
+
+\subsection*{How the axioms are related}
+The requirement that $\mathcal S$ be closed under countable complements and unions is exactly what is needed when defining events such as ``one of the $A_n$ happens'', ``none of the $A_n$ happens'', and ``all $A_n$ happen''. For example, countable intersections follow without a separate axiom:
+\[
+\bigcap_{n\ge1}A_n
+=S\setminus\bigcup_{n\ge1}(S\setminus A_n).
+\]
+Finite unions and intersections follow as special cases. In a finite sample space the power set is a natural choice, whereas for $S=\R$ the Borel or completed Lebesgue sigma-algebras are standard choices. Thus a probability space is a \emph{sample space plus an explicit collection of admissible events and their probabilities}, not just a sample space with an informal frequency interpretation.
+
+\section*{3. Measures and probability measures (\S1.3)}
+A measure on $(S,\mathcal S)$ is a map $\mu:\mathcal S\to[0,\infty]$ such that
+\[
+\mu(\varnothing)=0,
+\qquad
+\mu\left(\bigcup_{n\ge1}A_n\right)=\sum_{n\ge1}\mu(A_n)
+\]
+whenever the measurable sets $A_n$ are pairwise disjoint. The second property is \emph{countable additivity}. A finite measure satisfies $\mu(S)<\infty$; a probability measure satisfies $\mu(S)=1$. If $0<\mu(S)<\infty$, normalizing $\mu$ by $\mu(S)$ produces a probability measure.
+
+\subsection*{The Dirac measure}
+For a fixed point $x\in S$, define
+\[
+\delta_x(A)=\begin{cases}1,&x\in A,\\0,&x\notin A,\end{cases}
+\qquad A\in\mathcal S.
+\]
+It is a probability measure: clearly $\delta_x(\varnothing)=0$ and $\delta_x(S)=1$. For pairwise disjoint $A_n$, either $x$ belongs to none of them, in which case both sides of countable additivity equal zero, or $x$ belongs to exactly one $A_k$, in which case both sides equal one.
+
+
+\subsection*{Countable additivity illustrated}
+Take mutually disjoint measurable sets $A_1,A_2,\ldots$. For a probability measure $P$, the identity
+\[
+P\!\left(\bigcup_{n\ge1}A_n\right)=\sum_{n\ge1}P(A_n)
+\]
+means that the probability of one of the disjoint alternatives is obtained by adding their individual probabilities, even for infinitely many alternatives. For example, when $A_n=\{n\}$ in the space of positive integers, the point masses must sum to one. An attempt to assign the same strictly positive probability to all positive integers would make the sum infinite; assigning zero to all of them would make it zero. This recovers the obstruction encountered in the discussion of uniform probability on $\N$.
+
+\section*{4. Properties of measures (\S1.4)}
+\subsection*{Monotonicity}
+If $A\subseteq B$ are measurable, then $B=A\mathbin{\dot\cup}(B\setminus A)$. Consequently
+\[
+\mu(B)=\mu(A)+\mu(B\setminus A)\ge\mu(A).
+\]
+Thus measures are monotone.
+
+\subsection*{Increasing and decreasing sequences of sets}
+Write $A_n\uparrow A$ when $A_1\subseteq A_2\subseteq\cdots$ and $\bigcup_{n\ge1}A_n=A$. Write $A_n\downarrow A$ when $A_1\supseteq A_2\supseteq\cdots$ and $\bigcap_{n\ge1}A_n=A$. For example, for $n\ge1$,
+\[
+[0,1-1/n]\uparrow[0,1),\qquad
+[-1/n,1]\downarrow[0,1].
+\]
+In the first example the right endpoint $1$ is \emph{not} part of the union; that matters for the set-theoretic statement even though the Lebesgue measures of $[0,1)$ and $[0,1]$ coincide.
+
+\begin{proposition}[Continuity of measures]
+For measurable sets, 
+\begin{align*}
+A_n\uparrow A&\implies\mu(A_n)\uparrow\mu(A),\\
+A_n\downarrow A\ \text{and}\ \mu(A_1)<\infty
+&\implies\mu(A_n)\downarrow\mu(A).
+\end{align*}
+\end{proposition}
+\begin{proof}
+For increasing sets, let $B_1=A_1$ and $B_n=A_n\setminus A_{n-1}$ for $n\ge2$. These sets are disjoint and satisfy $A_n=\dot\bigcup_{j=1}^n B_j$ and $A=\dot\bigcup_{j\ge1}B_j$. Countable additivity gives
+\[
+\lim_{n\to\infty}\mu(A_n)=\sum_{j\ge1}\mu(B_j)=\mu(A).
+\]
+For decreasing sets with $\mu(A_1)<\infty$, set $B_n=A_1\setminus A_n$ and $B=A_1\setminus A$. Then $B_n\uparrow B$. The first part gives $\mu(B_n)\uparrow\mu(B)$, and
+\[
+\mu(A_n)=\mu(A_1)-\mu(B_n)\longrightarrow
+\mu(A_1)-\mu(B)=\mu(A).
+\]
+The finiteness assumption permits these subtractions.
+\end{proof}
+This result lets us compute the probability of limiting events by approximating them with simpler increasing or decreasing sequences of events.
+
+
+\subsection*{Examples and the role of finite measure}
+For Lebesgue measure $\lambda$, let $A_n=[0,1-1/n]$ for $n\ge1$. These sets increase to $[0,1)$, and $\lambda(A_n)=1-1/n\uparrow1=\lambda([0,1))$. For the decreasing sets $B_n=[-1/n,1]$, the intersection is $[0,1]$, and $\lambda(B_n)=1+1/n\downarrow1$.
+
+The finiteness assumption in continuity from above is not merely a technicality. Consider $C_n=[n,\infty)$ under Lebesgue measure. Then $C_n\downarrow\varnothing$, but $\lambda(C_n)=\infty$ for every $n$; the measures do not decrease to the measure $0$ of the empty intersection. This example explains why the subtraction $\mu(A_1)-\mu(B_n)$ in the proof is legitimate only when $\mu(A_1)<\infty$. For probability measures the condition always holds because $P(S)=1$.
+
+The usefulness of continuity from below can be expressed in terms of limiting events. If $A_n$ represents ``an event has happened by time $n$'', then the events $A_n$ are typically increasing. The probability of ``it happens at some finite time'' is then the limit of $P(A_n)$. Likewise, continuity from above handles progressively restrictive events when the initial probability is finite.
+
+\subsection*{The union bound}
+For any finite or countable family of measurable sets $(A_i)$,
+\[
+\mu\left(\bigcup_{i\ge1} A_i\right)\le\sum_{i\ge1}\mu(A_i).
+\]
+For two sets $A,B$, since $A\cup B=A\mathbin{\dot\cup}(B\setminus A)$,
+\[
+\mu(A\cup B)=\mu(A)+\mu(B\setminus A)\le\mu(A)+\mu(B).
+\]
+Induction gives the finite version. For countably many sets, set $C_n=\bigcup_{i=1}^n A_i$, note $C_n\uparrow\bigcup_{i\ge1}A_i$, and use continuity from below:
+\[
+\mu\left(\bigcup_{i\ge1}A_i\right)
+=\lim_{n\to\infty}\mu(C_n)
+\le\lim_{n\to\infty}\sum_{i=1}^n\mu(A_i)
+=\sum_{i\ge1}\mu(A_i).
+\]
+For disjoint sets equality holds by countable additivity; equality may also hold for overlapping sets when their overlaps have measure zero.
+
+
+\subsection*{An alternative disjointification proof}
+The union bound does not require its events to be disjoint. For a sequence $A_1,A_2,\ldots$, define
+\[
+B_1=A_1,\qquad
+B_n=A_n\setminus\bigcup_{j=1}^{n-1}A_j\quad(n\ge2).
+\]
+Then the $B_n$ are pairwise disjoint, $B_n\subseteq A_n$, and $\bigcup B_n=\bigcup A_n$. By countable additivity and monotonicity,
+\[
+\mu\left(\bigcup_{n\ge1}A_n\right)
+=\sum_{n\ge1}\mu(B_n)
+\le\sum_{n\ge1}\mu(A_n).
+\]
+This proof shows directly why the union bound is so useful: it converts overlapping alternatives into disjoint ones and then bounds each newly created disjoint piece by its original event. The same idea will reappear when comparing probability laws through overlapping mass.
+
+\section*{Reading note}
+This part introduces the measure-theoretic language needed to define distributions and couplings in the subsequent parts. The Vitali construction is presented to explain why one works with a sigma-algebra of measurable events rather than arbitrary subsets.
+\end{document}
