@@ -52,6 +52,14 @@ For a uniform random variable $U\sim\mathrm{Unif}(0,1)$, the pair $(Q_\mu(U),Q_\
 \]
 This fact was introduced in Part 3 and is used here without reproving its optimality.
 
+
+\subsection*{Why the Gaussian reference has to match the variance}
+For a centered square-integrable random variable $X$ with variance $\sigma_X^2$, the reference normal law in the comparison is $\N(0,\sigma_X^2)$. Without matching means and variances, changes in location or scale would contribute to the transport distance and obscure the approximation to the \emph{shape} of the normal law. If $X$ and $Y$ are independent, then
+\[
+\Var(aX+bY)=a^2\Var(X)+b^2\Var(Y).
+\]
+This variance formula is the reason the Gaussian reference for $aX+bY$ must be $\N(0,a^2\sigma_X^2+b^2\sigma_Y^2)$. It also rules out expressions in which the coefficient is missing its square. For later normalized sums the comparison law is always $\N(0,1)$.
+
 \section*{3. Tanaka's comparison inequality}
 Let $X,Y$ be independent, centered random variables with positive finite variances $\sigma_X^2,\sigma_Y^2$. Let $Z_X\sim\N(0,\sigma_X^2)$ and $Z_Y\sim\N(0,\sigma_Y^2)$ be independent normal reference variables. Their couplings with $X$ and $Y$ may be chosen optimal and mutually independent. For real coefficients $a,b$, set
 \[
@@ -67,6 +75,12 @@ Write $\rho(X)=\W\bigl(\Law(X),\N(0,\Var X)\bigr)$. The independently assembled 
 The middle equality follows because the two centered coupling errors are independent: both have expectation zero. The inequality is valid without assuming that $X$ or $Y$ is normal.
 
 For nonzero $a,b$, the \emph{strictness} statement used in this proof says that equality cannot occur unless both laws are Gaussian. This is the nontrivial equality characterization associated with Tanaka's inequality; we \emph{invoke it as a cited result} rather than attempt to derive it from an invalid assertion about linear quantile functions. A Gaussian quantile function is generally \emph{not} linear in its probability argument.
+
+
+\subsection*{What the inequality says and what it does not say}
+The squared-distance comparison is a weighted \emph{upper bound}. It follows from a particular coupling and the fact that Wasserstein distance optimizes over \emph{all} couplings. We are not asserting that independent optimal couplings of the summands automatically produce an optimal coupling of their sum. This distinction matters: the extra strictness result concerns exactly when the upper bound is attained.
+
+If both $X$ and $Y$ are Gaussian, their Wasserstein distances to the matching Gaussian laws are zero, so equality trivially holds. The converse statement for nonzero coefficients is the substantially harder direction used by the Tanaka approach. It is invoked from the cited literature. In particular, it does not follow from a supposed linear dependence of Gaussian quantiles on $u$; a Gaussian quantile is a nonlinear function of the quantile level.
 
 \section*{4. The dyadic subsequence: $n=2^k$}
 After centering and normalizing we may assume $\E X_1=0$ and $\E X_1^2=1$. Define
@@ -93,6 +107,17 @@ We next justify the passage to a limiting law. Independence, centering, and the 
 \end{align*}
 Hence $\sup_n\E|\gamma_n|^4<\infty$. Since $\E\eta_k^2=1$, the laws of $\eta_k$ are tight. Take a weakly convergent subsequence $\Law(\eta_{k_j})\Rightarrow\mu$. The uniform fourth-moment bound implies uniform integrability of the second moments; therefore this convergence actually holds in $W_2$ and the limit $\mu$ has mean zero and variance one.
 
+
+\subsection*{Why the fourth-moment hypothesis controls the limit}
+Tightness comes from $\E\eta_k^2=1$: Markov's inequality gives $P(|\eta_k|>R)\le R^{-2}$. A subsequential weak limit therefore exists on $\mathbb R$. However, \emph{weak convergence by itself does not allow squared moments to pass to the limit}. We need uniform integrability, and the fourth-moment bound supplies it:
+\[
+\E\bigl[\eta_k^2\mathbf1_{\{|\eta_k|>R\}}\bigr]
+\le \frac{\E\eta_k^4}{R^2}
+\le\frac{C}{R^2}\longrightarrow0
+\qquad(R\to\infty),
+\]
+uniformly in $k$. Thus the second moments converge along a weakly convergent subsequence, which on the real line is equivalent to convergence in $W_2$. This is why the fourth moment is useful for this particular coupling proof outline even though the theorem itself only needs a finite second moment.
+
 By continuity of Wasserstein distance,
 \[
 \W^2\bigl(\mu,\N(0,1)\bigr)=\lim_{j\to\infty}D_{k_j}=\ell.
@@ -111,6 +136,12 @@ By the \emph{cited strictness characterization}, equality for this independent, 
 \[
 \W\bigl(\Law(\eta_k),\N(0,1)\bigr)\longrightarrow0.
 \]
+
+
+\subsection*{Where the dyadic monotonicity comes from}
+Because $\eta_{k+1}$ has the same distribution as the normalized sum of two independent copies of $\eta_k$, the comparison inequality applies with equal weights. The conclusion is simply $D_{k+1}\le D_k$. Since the sequence is bounded below by zero, it has a limit $\ell$. Monotonicity alone does \emph{not} prove that $\ell=0$; for that, the argument identifies a subsequential limiting law and invokes the strictness/equality characterization.
+
+It is worth distinguishing three mathematical statements: (i) the nonnegative sequence $D_k$ has a limit; (ii) a subsequence of the probability laws of $\eta_k$ converges (initially weakly, then in $W_2$); and (iii) the only possible limiting law consistent with equality is Gaussian. All three are needed for the dyadic argument. Once the distance limit is zero, any subsequence selection issue disappears: $D_k\downarrow0$ along the entire dyadic sequence.
 
 \section*{5. Binary decomposition: from dyadic $n$ to every $n$}
 Every positive integer has a binary expansion $n=\sum_{k=0}^{m}\varepsilon_k2^k$, where $\varepsilon_k\in\{0,1\}$. Group the independent $X_i$ into the corresponding disjoint blocks. Each present block, divided by $\sqrt{2^k}$, has the same law as $\eta_k$; call its normalized sum $Y_k$. These block variables are independent. Thus
@@ -143,6 +174,21 @@ Then the correct decomposition is
 \sqrt{\frac4{13}}Y_2+\sqrt{\frac1{13}}Y_0.
 \]
 There is no general claim here that the distance decreases at \emph{every} successive sample size.
+
+
+\subsection*{Detailed estimate in the binary step}
+To see why the low-order blocks do not prevent convergence, split the right side of \eqref{eq:binary} at a fixed level $K$. The blocks with $k<K$ are at most $K$ in number and contribute no more than
+\[
+\sum_{k<K}\varepsilon_k\frac{2^k}{n}D_k
+\le \frac{D_0}{n}\sum_{k=0}^{K-1}2^k
+=\frac{D_0(2^K-1)}{n}.
+\]
+For the high-order blocks with $k\ge K$, choose $K$ such that $D_k\le\epsilon$, giving
+\[
+\sum_{k\ge K}\varepsilon_k\frac{2^k}{n}D_k
+\le \epsilon\sum_{k\ge K}\varepsilon_k\frac{2^k}{n}\le\epsilon.
+\]
+The first term vanishes with $n$, while the second is as small as desired. This is the step that converts information at dyadic sizes $2^k$ into a statement about every integer $n$; it proves convergence without claiming monotonicity of the complete sequence.
 
 \section*{6. Why the theorem needs only the second moment}
 The argument above follows the coupling method but assumes a finite fourth moment for compactness in $W_2$. The \emph{statement} of the theorem does not require this extra assumption. One standard independent way to see the full conclusion is to combine the classical CLT with the following criterion on $\mathbb R$: weak convergence $\mu_n\Rightarrow\mu$ \emph{together with} convergence of their second moments implies $W_2(\mu_n,\mu)\to0$. Here the classical CLT gives $G_n\Rightarrow Z$, while by normalization
