@@ -1,9 +1,9 @@
 \documentclass[10pt,a4paper]{article}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern,amsmath,amssymb,amsthm,mathtools,microtype,geometry,enumitem,hyperref,tikz}
-\geometry{left=23mm,right=23mm,top=20mm,bottom=21mm}
+\geometry{left=19mm,right=19mm,top=16mm,bottom=16mm}
 \hypersetup{hidelinks,pdftitle={Random Variables and Lebesgue Integration - Part 2 - Revised Study Notes}}
-\setlength{\parindent}{0pt}\setlength{\parskip}{4.5pt}
+\setlength{\parindent}{0pt}\setlength{\parskip}{3.3pt}
 \setlist[itemize]{topsep=4pt,itemsep=3pt}
 \newtheorem{proposition}{Proposition}
 \newcommand{\R}{\mathbb R}\newcommand{\Q}{\mathbb Q}\newcommand{\E}{\mathbb E}\newcommand{\B}{\mathcal B}
@@ -58,6 +58,20 @@ $\mathcal G=\{B\subseteq S_2:f^{-1}(B)\in\mathcal S_1\}$. Preimages preserve com
 \end{proof}
 A continuous map between metric spaces, each equipped with its Borel sigma-algebra, is measurable: preimages of open sets are open, and the open sets generate the Borel sigma-algebra.
 
+
+\subsection*{Why checking a generator is sufficient}
+The generator argument makes the measurability condition manageable. Suppose the target space is $\R$ with its Borel sigma-algebra. Rather than checking the preimage of every Borel set individually, it is enough to verify that
+\[
+\{s\in S_1:f(s)<a\}=f^{-1}(( -\infty,a))\in\mathcal S_1
+\quad\text{for every }a\in\R.
+\]
+Indeed, the sets $(-\infty,a)$ generate $\mathcal B(\R)$. To see why the proof works, note the elementary preimage identities
+\[
+f^{-1}(S_2\setminus B)=S_1\setminus f^{-1}(B),\qquad
+f^{-1}\!\left(\bigcup_n B_n\right)=\bigcup_n f^{-1}(B_n).
+\]
+Thus the family of target sets with measurable preimages is itself a sigma-algebra. Continuity then gives measurability immediately for maps between metric spaces carrying Borel sigma-algebras: the inverse image of an open set is open.
+
 \section*{2. Random variables and their laws (\S\S3.5--3.6)}
 A probability space $(\Omega,\mathcal A,P)$ consists of a sample space, a sigma-algebra, and a probability measure. A random variable taking values in $(S,\mathcal S)$ is a measurable map $X:\Omega\to S$. For a measurable set $B\in\mathcal S$,
 \[
@@ -89,6 +103,12 @@ For any probability measure $\mu$ on $(S,\mathcal S)$, there is a random variabl
 \begin{proof}
 Take $(\Omega,\mathcal A,P)=(S,\mathcal S,\mu)$ and the identity random variable $X(\omega)=\omega$. Then $X^{-1}(B)=B$ and $\mu_X(B)=\mu(B)$. Thus $\mu$ is the law of \emph{$X$}.
 \end{proof}
+
+
+\subsection*{The difference between an outcome and its law}
+A random variable $X$ maps outcomes $\omega\in\Omega$ to values in $S$. Its law $\mu_X$ is defined \emph{on subsets of the value space}, not on subsets of the original outcome space. For example, an observation may arise from a complicated physical experiment whose elementary outcomes are difficult to describe; its measured amplitude is a real number. Statements about the amplitude, such as $P(X\le t)$, are encoded by $\mu_X(( -\infty,t])$. The underlying space need not be reconstructed to use the law.
+
+The construction with the identity map also has a useful interpretation: every probability law on a measurable space can itself serve as a probability space. One chooses $\Omega=S$, $P=\mu$, and $X(\omega)=\omega$. The resulting pushforward law is exactly $\mu$. This is a \emph{realization} of a prescribed distribution, not a uniqueness claim about the underlying experiment.
 
 \section*{3. The nonnegative Lebesgue integral (\S4.2)}
 Let $f:S\to[0,\infty]$ be measurable on a measure space $(S,\mathcal S,\mu)$. A \emph{nonnegative simple function} is a finite sum $s=\sum_{i=1}^{m}a_i\mathbf1_{A_i}$ with $a_i\ge0$ and measurable $A_i$. Define its integral as $\int s\,d\mu=\sum_{i=1}^{m}a_i\mu(A_i)$ for a disjoint simple representation. The integral of a nonnegative measurable function is
@@ -122,6 +142,20 @@ If $0\le f_1\le f_2\le\cdots$ are measurable and $f_n\uparrow f$ pointwise, then
 \end{proposition}
 We use this theorem without reproducing its full proof. It allows limits of increasing nonnegative functions to pass through the integral.
 
+
+\subsection*{Integral lower sums and simple approximations}
+The use of simple functions corresponds closely to the partition-based intuition in the original notes. Given a finite measurable partition $S=A_1\mathbin{\dot\cup}\cdots\mathbin{\dot\cup}A_m$, choose nonnegative numbers $a_i\le \inf_{s\in A_i}f(s)$ (when the infimum is well defined). The simple function $s=\sum_i a_i\mathbf1_{A_i}$ then satisfies $0\le s\le f$, and its integral is
+\[
+\int_S s\,d\mu=\sum_{i=1}^{m}a_i\mu(A_i).
+\]
+Taking the supremum over such lower approximations recovers the Lebesgue integral for nonnegative measurable $f$. Unlike a Riemann partition, a measurable partition need not consist of neighboring intervals. It may group together points according to the \emph{value} of the function, providing much more flexibility for discontinuous functions.
+
+For instance, when $f=3\mathbf1_A+2\mathbf1_{S\setminus A}$ and $\mu(S)<\infty$, $f$ is already simple and
+\[
+\int_S f\,d\mu=3\mu(A)+2\mu(S\setminus A).
+\]
+This demonstrates explicitly how integrating a simple function reduces to summing measured contributions.
+
 \section*{4. Signed integrals and dominated convergence (\S4.3)}
 For a real-valued measurable function $f$, let
 \[
@@ -152,6 +186,21 @@ On $[0,1]$, consider $f(x)=\mathbf1_{[0,1]\setminus\Q}(x)$, equal to one at irra
 \int_{[0,1]}f(x)\,dx=1.
 \]
 
+
+\subsection*{Why domination matters}
+Pointwise convergence does not generally allow one to swap the order of a limit and an integral. On the probability space $([0,1],\mathcal B([0,1]),\lambda)$, set
+\[
+f_n(x)=n\,\mathbf1_{(0,1/n)}(x).
+\]
+Then $f_n(x)\to0$ for each fixed $x\in[0,1]$, but
+\[
+\int_0^1 f_n(x)\,dx=n\frac1n=1
+\quad\text{for every }n.
+\]
+Thus $\lim_n\int f_n\,d\lambda=1$ while $\int\lim_n f_n\,d\lambda=0$. There is no common integrable bound on the sequence. This illustration makes clear why the correct hypotheses of dominated convergence are substantial rather than cosmetic.
+
+The example $\mathbf1_{[0,1]\setminus\Q}$ shows a separate point: Riemann integrability and Lebesgue integrability have different domains. Every subinterval contains rational and irrational numbers, so its upper and lower Riemann sums differ. Yet the complement of the rationals occupies all the Lebesgue measure in $[0,1]$, and its Lebesgue integral is one.
+
 \section*{5. Expectation (\S4.4)}
 For an integrable real random variable $X$ on $(\Omega,\mathcal A,P)$, its expectation is
 \[
@@ -166,6 +215,19 @@ The properties of the Lebesgue integral immediately give linearity $\E(aX+bY)=a\
 \item \textbf{Monotone convergence.} If $0\le X_n\uparrow X$ almost surely, then $\E X_n\uparrow\E X$, with the possibility of $+\infty$.
 \end{itemize}
 Individual integrability of the $X_n$ is not enough by itself to exchange expectation with the limit.
+
+
+\subsection*{Expectation from laws rather than sample outcomes}
+If $X$ is integrable and has law $\mu_X$ on $\R$, then
+\[
+\E X=\int_{\Omega}X(\omega)\,P(d\omega)
+=\int_{\R}x\,\mu_X(dx).
+\]
+More generally, for a measurable real function $h$ with $\E|h(X)|<\infty$,
+\[
+\E[h(X)]=\int_{\R}h(x)\,\mu_X(dx).
+\]
+The identity illustrates why the law is so useful: to compute expectations of observables, it is often enough to know the distribution and not the details of the original experiment. When moving from convergence of distributions to convergence of expectations, however, one must still check the relevant moment or uniform-integrability conditions.
 
 \section*{Reading note}
 The distinction between pointwise or almost-sure convergence and convergence of integrals becomes important later, when probability laws and second moments are passed to limits in the Wasserstein argument.
