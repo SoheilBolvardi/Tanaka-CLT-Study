@@ -1,0 +1,198 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,amsmath,amssymb,amsthm,mathtools,microtype,geometry,enumitem,hyperref,booktabs}
+\geometry{left=19mm,right=19mm,top=17mm,bottom=17mm}
+\hypersetup{hidelinks,pdftitle={Probability Metrics and Couplings - Part 3 - Revised Study Notes}}
+\setlength{\parindent}{0pt}\setlength{\parskip}{3.3pt}
+\setlist[itemize]{topsep=4pt,itemsep=3pt}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newcommand{\R}{\mathbb R}\newcommand{\E}{\mathbb E}\newcommand{\N}{\mathbb N}
+\newcommand{\TV}{d_{\mathrm{TV}}}
+\begin{document}
+\begin{center}
+{\Large\bfseries PART 3: Probability Metrics and Couplings}\par
+{\normalsize Mathematical reading notes --- revised edition, 2026}
+\end{center}
+\vspace{8pt}
+\textbf{Topics.} Metrics on spaces of probability laws; total variation distance (\S9.1); coupling and its relation to total variation (\S9.2); Wasserstein distance (\S12.4); quantile coupling on the real line; and an example comparing different optimal couplings.
+
+\section*{1. Metric spaces and probability distributions}
+Informally, a \emph{space} consists of a set together with a specified mathematical structure. A \emph{metric} on a set $A$ is a map $d:A\times A\to[0,\infty)$ satisfying for all $x,y,z\in A$
+\begin{align*}
+&d(x,y)=0\ \Longleftrightarrow\ x=y \quad\text{(identity of indiscernibles)},\\
+&d(x,y)=d(y,x) \quad\text{(symmetry)},\\
+&d(x,z)\le d(x,y)+d(y,z)\quad\text{(triangle inequality)}.
+\end{align*}
+Probability measures can themselves be regarded as points in a metric space, allowing us to compare whole distributions rather than individual sample outcomes.
+
+\section*{2. Total variation distance (\S9.1)}
+For probability measures $\mu$ and $\nu$ on the same measurable space $(S,\mathcal S)$, define
+\[
+\TV(\mu,\nu)=\sup_{A\in\mathcal S}|\mu(A)-\nu(A)|.
+\]
+Thus total variation records the largest difference in the probabilities assigned to the same event. The formula is a metric on the space of probability measures: symmetry and identity follow directly, and the triangle inequality follows from
+\[
+|\mu(A)-\lambda(A)|\le|\mu(A)-\nu(A)|+|\nu(A)-\lambda(A)|
+\]
+for every measurable $A$, followed by taking the supremum.
+
+For example, if $x,y\in\R$, then $\TV(\delta_x,\delta_y)=0$ when $x=y$ and $1$ otherwise. In the latter case, the singleton event $\{x\}$ distinguishes the two point masses.
+
+\subsection*{Two normalized densities: common and excess mass}
+Suppose $f_1,f_2\ge0$ are densities with respect to one reference measure $\lambda$ and
+\[
+\int_S f_1\,d\lambda=\int_S f_2\,d\lambda=1.
+\]
+Set $h=f_1-f_2$, and write $h_+=\max\{h,0\}$, $h_-=\max\{-h,0\}$. As $\int h\,d\lambda=0$,
+\begin{equation}\label{eq:mass}
+\int_S h_+\,d\lambda=\int_S h_-\,d\lambda
+=\frac12\int_S|h|\,d\lambda.
+\end{equation}
+The common mass is
+\[
+\int_S(f_1\wedge f_2)\,d\lambda
+=1-\int_S(f_1-f_2)_+\,d\lambda
+=1-\frac12\int_S|f_1-f_2|\,d\lambda,
+\]
+where $f_1\wedge f_2=\min\{f_1,f_2\}$. These identities formalize the intuition that the probability masses shared by the two laws cancel, while half their $L^1$ difference counts the excess mass on either side.
+
+\begin{proposition}[Total variation of densities]
+If $\mu$ and $\nu$ have densities $f_1$ and $f_2$ with respect to a common measure $\lambda$, then
+\[
+\TV(\mu,\nu)=\frac12\int_S|f_1-f_2|\,d\lambda.
+\]
+\end{proposition}
+\begin{proof}
+Let $A=\{x:f_1(x)>f_2(x)\}$. Then
+\[
+\mu(A)-\nu(A)=\int_A(f_1-f_2)\,d\lambda
+=\int_S(f_1-f_2)_+\,d\lambda
+=\tfrac12\int_S|f_1-f_2|\,d\lambda.
+\]
+Thus the supremum defining $\TV$ is at least the right side. Conversely, for every measurable $B$,
+\[
+\mu(B)-\nu(B)=\int_B(f_1-f_2)\,d\lambda
+\le\int_S(f_1-f_2)_+\,d\lambda,
+\]
+and exchanging $f_1$ and $f_2$ gives the corresponding bound for $\nu(B)-\mu(B)$. Taking absolute values and then the supremum establishes equality.
+\end{proof}
+When $S$ is finite or countable and $p_1,p_2$ are probability mass functions, the formula becomes
+\[
+\TV(\mu,\nu)=\frac12\sum_{x\in S}|p_1(x)-p_2(x)|.
+\]
+The summand compares the \emph{two distributions at the same point $x$}, not values at two arbitrary points.
+
+\subsection*{Examples}
+For Bernoulli distributions,
+\[
+\TV\bigl(\mathrm{Ber}(p),\mathrm{Ber}(q)\bigr)
+=\frac12\bigl(|(1-p)-(1-q)|+|p-q|\bigr)=|p-q|.
+\]
+Consider also distributions over three income groups (low, medium, high):
+\[
+\mu=(0.2,0.6,0.2),\qquad\nu=(0.5,0.2,0.3).
+\]
+Their total variation distance is
+\[
+\TV(\mu,\nu)=\tfrac12(|0.2-0.5|+|0.6-0.2|+|0.2-0.3|)=0.4.
+\]
+Here $0.4$ is the amount of mass that must be reassigned in an optimal discrete matching, consistent with the \emph{common-mass} identity above.
+
+\section*{3. Coupling two distributions (\S9.2)}
+A \emph{coupling} of probability measures $\mu_1$ and $\mu_2$ is a joint law $\pi$ on $S_1\times S_2$ whose marginals are $\mu_1$ and $\mu_2$. Equivalently, it is a pair of random variables $(X_1,X_2)$ defined on the same probability space with the prescribed marginal laws. The choice of coupling fixes their dependence; the independent coupling is just one possibility.
+
+For example, given distributions of people's heights and weights, different couplings describe different possible assignments of heights to weights while leaving each marginal distribution unchanged. A coupling is therefore more information than knowing the two marginals separately.
+
+\begin{proposition}[Coupling inequality for total variation]
+For any coupling $(X_1,X_2)$ of probability laws on the same space for which equality of outcomes is measurable,
+\[
+\TV(\mu_1,\mu_2)\le P(X_1\ne X_2).
+\]
+On standard Borel spaces, a \emph{maximal coupling} attains equality.
+\end{proposition}
+\begin{proof}
+For each measurable $A\subseteq S$,
+\begin{align*}
+|\mu_1(A)-\mu_2(A)|
+&=\left|\E\bigl[\mathbf1_A(X_1)-\mathbf1_A(X_2)\bigr]\right|\\
+&\le\E\bigl|\mathbf1_A(X_1)-\mathbf1_A(X_2)\bigr|\\
+&\le P(X_1\ne X_2).
+\end{align*}
+The final inequality uses the fact that the two indicator functions coincide whenever $X_1=X_2$. Take the supremum over all $A$. The existence of a maximal coupling is a separate standard result, not proved here.
+\end{proof}
+
+\subsection*{Bernoulli example: independent versus maximal coupling}
+Let $X_1\sim\mathrm{Ber}(p)$ and $X_2\sim\mathrm{Ber}(q)$ with $0\le p<q\le1$. If $X_1,X_2$ are independent,
+\begin{align*}
+P(X_1\ne X_2)
+&=P(X_1=1,X_2=0)+P(X_1=0,X_2=1)\\
+&=p(1-q)+(1-p)q=p+q-2pq.
+\end{align*}
+For $p=0.5$, $q=0.6$, this probability is $0.5$, giving a valid but loose upper bound on the actual total variation distance $0.1$.
+
+To construct an optimal coupling, take independent variables $\theta_1\sim\mathrm{Ber}(r_1)$ and $\theta_2\sim\mathrm{Ber}(r_2)$, and set
+\[
+X_1=\theta_1,\qquad X_2=\theta_1\vee\theta_2.
+\]
+The marginal conditions require
+\[
+r_1=p,\qquad q=r_1+(1-r_1)r_2,
+\qquad r_2=\frac{q-p}{1-p}
+\]
+(when $p<1$, which holds here). Then
+\[
+P(X_1\ne X_2)=P(\theta_1=0,\theta_2=1)
+=(1-p)r_2=q-p=\TV\bigl(\mathrm{Ber}(p),\mathrm{Ber}(q)\bigr).
+\]
+This achieves the lowest possible disagreement probability. For the numerical example it equals $0.1$.
+
+\section*{4. Wasserstein distance (\S12.4)}
+For $p\ge1$, let $\mathcal P_p(\R)$ denote probability measures with finite $p$th absolute moments. The $p$-Wasserstein distance is
+\[
+W_p(\mu,\nu)=\left(\inf_{(X,Y)\in\Gamma(\mu,\nu)}
+\E|X-Y|^p\right)^{1/p},\qquad\mu,\nu\in\mathcal P_p(\R).
+\]
+The infimum runs over all couplings of the two distributions. In this framework total variation also has a coupling representation, but uses the cost $\mathbf1_{\{X\ne Y\}}$, whereas Wasserstein distance uses $|X-Y|^p$. The cost for $W_2$ grows quadratically with displacement; the analogy with physical transport energy is a useful intuition, not an identity with mechanical energy $\tfrac12 mv^2$.
+
+A standard result, used without proof here, is that $W_p$ is a metric on $\mathcal P_p(\R)$. Thus $W_p(\mu,\nu)=0$ exactly when the laws coincide. The $p$th root ensures the distance scales linearly under changes of spatial units.
+
+\subsection*{Quantile functions and optimal coupling}
+The quantile (generalized inverse CDF) is
+\[
+Q_\mu(u)=\inf\{x\in\R:F_\mu(x)\ge u\},\qquad0<u<1.
+\]
+For $U\sim\operatorname{Unif}(0,1)$ and $p\ge1$,
+\begin{equation}\label{eq:quantile}
+W_p(\mu,\nu)
+=\left(\E\left|Q_\mu(U)-Q_\nu(U)\right|^p\right)^{1/p}
+=\left(\int_0^1|Q_\mu(u)-Q_\nu(u)|^p\,du\right)^{1/p}.
+\end{equation}
+This is the one-dimensional \emph{quantile coupling}: equal quantile levels are paired. The absolute value is essential, in particular when $p$ is not an even integer. Optimality is a standard result from one-dimensional optimal transport, taken as given in these reading notes.
+
+\subsection*{A three-city example: different metrics, different couplings}
+Place cities $A,B,C$ at $-x,0,x$, where $x>0$. Consider the supply and demand laws
+\[
+\mu=\tfrac12\delta_{-x}+\tfrac12\delta_0,
+\qquad\nu=\tfrac12\delta_0+\tfrac12\delta_x.
+\]
+Two possible couplings are:
+\begin{center}
+\begin{tabular}{@{}lll@{}}\toprule
+Coupling & Pairs, each with mass $1/2$ & Interpretation\\ \midrule
+$\gamma_0$ & $(-x,x)$ and $(0,0)$ & Maximize exact matches\\
+$\gamma_1$ & $(-x,0)$ and $(0,x)$ & Pair equal quantile levels\\ \bottomrule
+\end{tabular}
+\end{center}
+The mismatching probabilities and quadratic transport costs are
+\begin{align*}
+P_{\gamma_0}(X\ne Y)&=\tfrac12,&
+\bigl(\E_{\gamma_0}|X-Y|^2\bigr)^{1/2}&=\sqrt2\,x,\\
+P_{\gamma_1}(X\ne Y)&=1,&
+\bigl(\E_{\gamma_1}|X-Y|^2\bigr)^{1/2}&=x.
+\end{align*}
+Because $\TV(\mu,\nu)=1/2$, the first coupling is maximal for total variation. By the quantile formula \eqref{eq:quantile}, the second coupling is optimal for $W_2$, giving $W_2(\mu,\nu)=x$. Thus a coupling optimal for one probability metric need not be optimal for another.
+
+\section*{Reading note}
+The next part uses $W_2$ and independent optimal couplings to study the normalized sums in Tanaka's central limit theorem.
+\end{document}
