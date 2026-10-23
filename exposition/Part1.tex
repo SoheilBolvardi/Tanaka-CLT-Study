@@ -1,9 +1,9 @@
 \documentclass[10pt,a4paper]{article}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern,amsmath,amssymb,amsthm,mathtools,microtype,geometry,enumitem,hyperref}
-\geometry{left=23mm,right=23mm,top=20mm,bottom=21mm}
+\geometry{left=19mm,right=19mm,top=16mm,bottom=16mm}
 \hypersetup{hidelinks,pdftitle={Foundations of Measure-Theoretic Probability - Part 1 - Revised Study Notes}}
-\setlength{\parindent}{0pt}\setlength{\parskip}{4.5pt}
+\setlength{\parindent}{0pt}\setlength{\parskip}{3.3pt}
 \setlist[itemize]{topsep=4pt,itemsep=3pt}
 \newtheorem{proposition}{Proposition}
 \newcommand{\N}{\mathbb N}\newcommand{\Q}{\mathbb Q}\newcommand{\R}{\mathbb R}
@@ -65,6 +65,18 @@ There are infinitely many such rationals. If $m(V)=0$ the sum is $0$; if $m(V)>0
 \end{proof}
 The argument \emph{does not} say that points of $A$ lying outside $[0,1]$ have measure zero, nor that $A$ has the same length as $[0,1]$. It motivates restricting the domain of measurable events instead of attempting to measure every subset.
 
+
+\subsection*{Further details of the Vitali construction}
+The equivalence classes in the preceding argument are neither singletons nor a finite partition. For example, if $x\in[0,1]$, then every $x+q$ that stays inside $[0,1]$, with $q\in\Q$, belongs to the class of $x$. Since $\Q$ is countable, so is each equivalence class. The axiom of choice is used to select one representative \emph{simultaneously} from each class. It does not prescribe an effective procedure for listing those representatives.
+
+The restriction to \emph{rational} translates is crucial to disjointness. If $q_1,q_2$ were arbitrary distinct \emph{real} numbers, then $q_2-q_1$ need not be rational, and the defining property of a Vitali set would not yield a contradiction. The corrected measure argument uses both inclusions
+\[
+[0,1]\subseteq\bigcup_{q\in\Q\cap[-1,1]}(V+q)\subseteq[-1,2],
+\]
+not an equality of the middle set with $[0,1]$. This is why monotonicity gives lower and upper \emph{bounds} on its length.
+
+A final point: this construction disproves the existence of a length assignment to \emph{every} real subset satisfying the stated properties. It does not say that geometric probability is invalid on its natural domain. Lebesgue measure is well defined on the sigma-algebra of Lebesgue-measurable sets, so ordinary geometric probability remains a valuable special case.
+
 \section*{2. Probability spaces and sigma-algebras (\S1.2)}
 A \emph{sigma-algebra} $\mathcal S$ on a set $S$ is a collection of subsets satisfying
 \begin{enumerate}[leftmargin=*,label=(\roman*)]
@@ -75,6 +87,15 @@ A \emph{sigma-algebra} $\mathcal S$ on a set $S$ is a collection of subsets sati
 By De Morgan's law it is also closed under countable intersections. Members of $\mathcal S$ are \emph{measurable sets}; $(S,\mathcal S)$ is a measurable space. Both the full power set $\mathcal P(S)$ and the trivial sigma-algebra $\{\varnothing,S\}$ are examples, for \emph{any} set $S$.
 
 A \emph{probability space} is a triple $(S,\mathcal S,P)$, where $P:\mathcal S\to[0,1]$ is a probability measure. We do not ask $P$ to assign probabilities to all subsets of $S$ unless we have specifically chosen the full power set as the sigma-algebra.
+
+
+\subsection*{How the axioms are related}
+The requirement that $\mathcal S$ be closed under countable complements and unions is exactly what is needed when defining events such as ``one of the $A_n$ happens'', ``none of the $A_n$ happens'', and ``all $A_n$ happen''. For example, countable intersections follow without a separate axiom:
+\[
+\bigcap_{n\ge1}A_n
+=S\setminus\bigcup_{n\ge1}(S\setminus A_n).
+\]
+Finite unions and intersections follow as special cases. In a finite sample space the power set is a natural choice, whereas for $S=\R$ the Borel or completed Lebesgue sigma-algebras are standard choices. Thus a probability space is a \emph{sample space plus an explicit collection of admissible events and their probabilities}, not just a sample space with an informal frequency interpretation.
 
 \section*{3. Measures and probability measures (\S1.3)}
 A measure on $(S,\mathcal S)$ is a map $\mu:\mathcal S\to[0,\infty]$ such that
@@ -92,6 +113,14 @@ For a fixed point $x\in S$, define
 \qquad A\in\mathcal S.
 \]
 It is a probability measure: clearly $\delta_x(\varnothing)=0$ and $\delta_x(S)=1$. For pairwise disjoint $A_n$, either $x$ belongs to none of them, in which case both sides of countable additivity equal zero, or $x$ belongs to exactly one $A_k$, in which case both sides equal one.
+
+
+\subsection*{Countable additivity illustrated}
+Take mutually disjoint measurable sets $A_1,A_2,\ldots$. For a probability measure $P$, the identity
+\[
+P\!\left(\bigcup_{n\ge1}A_n\right)=\sum_{n\ge1}P(A_n)
+\]
+means that the probability of one of the disjoint alternatives is obtained by adding their individual probabilities, even for infinitely many alternatives. For example, when $A_n=\{n\}$ in the space of positive integers, the point masses must sum to one. An attempt to assign the same strictly positive probability to all positive integers would make the sum infinite; assigning zero to all of them would make it zero. This recovers the obstruction encountered in the discussion of uniform probability on $\N$.
 
 \section*{4. Properties of measures (\S1.4)}
 \subsection*{Monotonicity}
@@ -131,6 +160,14 @@ The finiteness assumption permits these subtractions.
 \end{proof}
 This result lets us compute the probability of limiting events by approximating them with simpler increasing or decreasing sequences of events.
 
+
+\subsection*{Examples and the role of finite measure}
+For Lebesgue measure $\lambda$, let $A_n=[0,1-1/n]$ for $n\ge1$. These sets increase to $[0,1)$, and $\lambda(A_n)=1-1/n\uparrow1=\lambda([0,1))$. For the decreasing sets $B_n=[-1/n,1]$, the intersection is $[0,1]$, and $\lambda(B_n)=1+1/n\downarrow1$.
+
+The finiteness assumption in continuity from above is not merely a technicality. Consider $C_n=[n,\infty)$ under Lebesgue measure. Then $C_n\downarrow\varnothing$, but $\lambda(C_n)=\infty$ for every $n$; the measures do not decrease to the measure $0$ of the empty intersection. This example explains why the subtraction $\mu(A_1)-\mu(B_n)$ in the proof is legitimate only when $\mu(A_1)<\infty$. For probability measures the condition always holds because $P(S)=1$.
+
+The usefulness of continuity from below can be expressed in terms of limiting events. If $A_n$ represents ``an event has happened by time $n$'', then the events $A_n$ are typically increasing. The probability of ``it happens at some finite time'' is then the limit of $P(A_n)$. Likewise, continuity from above handles progressively restrictive events when the initial probability is finite.
+
 \subsection*{The union bound}
 For any finite or countable family of measurable sets $(A_i)$,
 \[
@@ -148,6 +185,21 @@ Induction gives the finite version. For countably many sets, set $C_n=\bigcup_{i
 =\sum_{i\ge1}\mu(A_i).
 \]
 For disjoint sets equality holds by countable additivity; equality may also hold for overlapping sets when their overlaps have measure zero.
+
+
+\subsection*{An alternative disjointification proof}
+The union bound does not require its events to be disjoint. For a sequence $A_1,A_2,\ldots$, define
+\[
+B_1=A_1,\qquad
+B_n=A_n\setminus\bigcup_{j=1}^{n-1}A_j\quad(n\ge2).
+\]
+Then the $B_n$ are pairwise disjoint, $B_n\subseteq A_n$, and $\bigcup B_n=\bigcup A_n$. By countable additivity and monotonicity,
+\[
+\mu\left(\bigcup_{n\ge1}A_n\right)
+=\sum_{n\ge1}\mu(B_n)
+\le\sum_{n\ge1}\mu(A_n).
+\]
+This proof shows directly why the union bound is so useful: it converts overlapping alternatives into disjoint ones and then bounds each newly created disjoint piece by its original event. The same idea will reappear when comparing probability laws through overlapping mass.
 
 \section*{Reading note}
 This part introduces the measure-theoretic language needed to define distributions and couplings in the subsequent parts. The Vitali construction is presented to explain why one works with a sigma-algebra of measurable events rather than arbitrary subsets.
